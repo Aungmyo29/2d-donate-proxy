@@ -1,8 +1,8 @@
 const timeWindows = {
-  "12:01": { start: "11:45", end: "12:05", lines: ["modern"] },
-  "16:30": { start: "15:45", end: "16:35", lines: ["modern"] },
-  "09:30": { start: "09:00", end: "09:45", lines: ["modern", "internet", "tw"] },
-  "14:00": { start: "13:30", end: "14:30", lines: ["modern", "internet", "tw"] }
+  "12:01": { start: "00:00", end: "23:59", lines: ["modern"] },
+  "16:30": { start: "00:00", end: "23:59", lines: ["modern"] },
+  "09:30": { start: "00:00", end: "23:59", lines: ["modern", "internet", "tw"] },
+  "14:00": { start: "00:00", end: "23:59", lines: ["modern", "internet", "tw"] }
 };
 
 module.exports = async (req, res) => {
