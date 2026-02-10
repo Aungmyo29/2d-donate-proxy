@@ -37,10 +37,31 @@ module.exports = async (req, res) => {
             } catch (e) {
               value = "--";
             }
-          } else if (line === "internet") {
-            value = "43";
-          } else if (line === "tw") {
-            value = "75";
+          } 
+          else if (line === "internet") {
+            try {
+              const response = await fetch('https://api.set.or.th/api/market/quote/internet');
+              if (response.ok) {
+                const data = await response.json();
+                // SET Internet index ရဲ့ နောက်ဆုံး တန်ဖိုး ယူတယ် (ဥပမာ)
+                value = data.last || "--";
+              }
+            } catch (e) {
+              value = "--";
+            }
+          } 
+          else if (line === "tw") {
+            try {
+              // Taiwan Weighted Index အတွက် အခမဲ့ API တစ်ခု သုံး (အခု အလွယ်ဆုံး နည်း)
+              const response = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/^TWII?interval=1d');
+              if (response.ok) {
+                const data = await response.json();
+                const quote = data.chart.result[0].meta.regularMarketPrice;
+                value = quote ? quote.toFixed(2) : "--";
+              }
+            } catch (e) {
+              value = "--";
+            }
           }
 
           result[timeKey][line] = value;
