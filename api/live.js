@@ -1,8 +1,8 @@
 const timeWindows = {
   "12:01": { start: "00:00", end: "23:59", lines: ["modern"] },
   "16:30": { start: "00:00", end: "23:59", lines: ["modern"] },
-  "09:30": { start: "00:00", end: "23:59", lines: ["modern", "internet", "tw"] },
-  "14:00": { start: "00:00", end: "23:59", lines: ["modern", "internet", "tw"] }
+  "09:30": { start: "00:00", end: "23:59", lines: ["modern", "internet"] },
+  "14:00": { start: "00:00", end: "23:59", lines: ["modern", "internet"] }
 };
 
 module.exports = async (req, res) => {
@@ -32,6 +32,8 @@ module.exports = async (req, res) => {
               const response = await fetch('https://api.thaistock2d.com/live');
               if (response.ok) {
                 const data = await response.json();
+                // ဒီနေရာမှာ တကယ့် 2D တန်ဖိုး ယူတယ်
+                // မင်း စမ်းတဲ့အခါ "41" ထွက်ခဲ့တာ အဆင်ပြေရင် ဒီအတိုင်း ဆက်ထားမယ်
                 value = data.live?.twod || "--";
               }
             } catch (e) {
@@ -40,24 +42,11 @@ module.exports = async (req, res) => {
           } 
           else if (line === "internet") {
             try {
+              // Internet line အတွက် SET ကနေ ယူတယ်
               const response = await fetch('https://api.set.or.th/api/market/quote/internet');
               if (response.ok) {
                 const data = await response.json();
-                // SET Internet index ရဲ့ နောက်ဆုံး တန်ဖိုး ယူတယ် (ဥပမာ)
-                value = data.last || "--";
-              }
-            } catch (e) {
-              value = "--";
-            }
-          } 
-          else if (line === "tw") {
-            try {
-              // Taiwan Weighted Index အတွက် အခမဲ့ API တစ်ခု သုံး (အခု အလွယ်ဆုံး နည်း)
-              const response = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/^TWII?interval=1d');
-              if (response.ok) {
-                const data = await response.json();
-                const quote = data.chart.result[0].meta.regularMarketPrice;
-                value = quote ? quote.toFixed(2) : "--";
+                value = data.last || "--";  // နောက်ဆုံး တန်ဖိုး
               }
             } catch (e) {
               value = "--";
